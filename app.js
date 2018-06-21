@@ -4,6 +4,7 @@ const path = require("path");
 const expressValidator = require("express-validator");
 const mongojs = require("mongojs");
 const db = mongojs("customerapp", ["users"]);
+const ObjectId = mongojs.ObjectId;
 
 const app = express();
 
@@ -83,6 +84,15 @@ app.post("/users/add", function(req, res) {
   }
 
   console.log(newUser);
+});
+
+app.delete("/users/delete/:id", function(req, res) {
+  db.users.remove({ _id: ObjectId(req.params.id) }, function(err, result) {
+    if (err) {
+      console.log(err);
+    }
+    res.redirect("/");
+  });
 });
 
 app.listen(3000, function() {
